@@ -29,6 +29,11 @@ const routes: Array<any> = [
 		path: '/checkbox',
 		name: 'Checkbox',
 		component: () => import(/* webpackChunkName: "checkbox" */ '../views/Checkbox.vue')
+	},
+	{
+		path: '/input',
+		name: 'Input',
+		component: () => import(/* webpackChunkName: "input" */ '../views/Input.vue')
 	}
 ]
 
