@@ -24,6 +24,11 @@ const routes: Array<any> = [
 		path: '/radio',
 		name: 'Radio',
 		component: () => import(/* webpackChunkName: "radio" */ '../views/Radio.vue')
+	},
+	{
+		path: '/checkbox',
+		name: 'Checkbox',
+		component: () => import(/* webpackChunkName: "checkbox" */ '../views/Checkbox.vue')
 	}
 ]
 
