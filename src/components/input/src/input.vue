@@ -81,7 +81,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, computed, ComputedRef, ref, Ref, onMounted } from 'vue'
+import { defineComponent, inject, computed, ComputedRef, ref, Ref, onMounted, watch } from 'vue'
 
 export default defineComponent({
 	name: 'ElInput',
@@ -224,6 +224,10 @@ export default defineComponent({
 		)
 
 		onMounted(() => {
+			setNativeInputValue()
+		})
+
+		watch(nativeInputValue, () => {
 			setNativeInputValue()
 		})
 
