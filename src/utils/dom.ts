@@ -3,16 +3,20 @@
 // import * as Vue from 'vue'
 
 const isServer = false
+// eslint-disable-next-line
 const SPECIAL_CHARS_REGEXP = /([\:\-\_]+(.))/g
+// eslint-disable-next-line
 const MOZ_HACK_REGEXP = /^moz([A-Z])/
+// eslint-disable-next-line
+// @ts-ignore
 const ieVersion = isServer ? 0 : Number(document.documentMode)
 
 /* istanbul ignore next */
-const trim = function(string) {
+const trim = function(string: string) {
 	return (string || '').replace(/^[\s\uFEFF]+|[\s\uFEFF]+$/g, '')
 }
 /* istanbul ignore next */
-const camelCase = function(name) {
+const camelCase = function(name: string) {
 	return name
 		.replace(SPECIAL_CHARS_REGEXP, function(_, separator, letter, offset) {
 			return offset ? letter.toUpperCase() : letter
@@ -23,13 +27,13 @@ const camelCase = function(name) {
 /* istanbul ignore next */
 export const on = (function() {
 	if (!isServer && document.addEventListener) {
-		return function(element, event, handler) {
+		return function(element: any, event: string, handler: any) {
 			if (element && event && handler) {
 				element.addEventListener(event, handler, false)
 			}
 		}
 	} else {
-		return function(element, event, handler) {
+		return function(element: any, event: string, handler: any) {
 			if (element && event && handler) {
 				element.attachEvent('on' + event, handler)
 			}
@@ -40,13 +44,13 @@ export const on = (function() {
 /* istanbul ignore next */
 export const off = (function() {
 	if (!isServer && document.removeEventListener) {
-		return function(element, event, handler) {
+		return function(element: any, event: string, handler: any) {
 			if (element && event) {
 				element.removeEventListener(event, handler, false)
 			}
 		}
 	} else {
-		return function(element, event, handler) {
+		return function(element: any, event: string, handler: any) {
 			if (element && event) {
 				element.detachEvent('on' + event, handler)
 			}
@@ -55,10 +59,12 @@ export const off = (function() {
 })()
 
 /* istanbul ignore next */
-export const once = function(el, event, fn) {
-	var listener = function() {
+export const once = function(el: any, event: string, fn: any) {
+	const listener = function() {
 		if (fn) {
-			fn.apply(this, arguments)
+			// eslint-disable-next-line
+			// @ts-ignore
+			fn.apply(this, ...args)
 		}
 		off(el, event, listener)
 	}
@@ -66,7 +72,7 @@ export const once = function(el, event, fn) {
 }
 
 /* istanbul ignore next */
-export function hasClass(el, cls) {
+export function hasClass(el: any, cls: any) {
 	if (!el || !cls) return false
 	if (cls.indexOf(' ') !== -1) throw new Error('className should not contain space.')
 	if (el.classList) {
@@ -77,13 +83,13 @@ export function hasClass(el, cls) {
 }
 
 /* istanbul ignore next */
-export function addClass(el, cls) {
+export function addClass(el: any, cls: any) {
 	if (!el) return
-	var curClass = el.className
-	var classes = (cls || '').split(' ')
+	let curClass = el.className
+	const classes = (cls || '').split(' ')
 
-	for (var i = 0, j = classes.length; i < j; i++) {
-		var clsName = classes[i]
+	for (let i = 0, j = classes.length; i < j; i++) {
+		const clsName = classes[i]
 		if (!clsName) continue
 
 		if (el.classList) {
@@ -98,13 +104,13 @@ export function addClass(el, cls) {
 }
 
 /* istanbul ignore next */
-export function removeClass(el, cls) {
+export function removeClass(el: any, cls: any) {
 	if (!el || !cls) return
-	var classes = cls.split(' ')
-	var curClass = ' ' + el.className + ' '
+	const classes = cls.split(' ')
+	let curClass = ' ' + el.className + ' '
 
-	for (var i = 0, j = classes.length; i < j; i++) {
-		var clsName = classes[i]
+	for (let i = 0, j = classes.length; i < j; i++) {
+		const clsName = classes[i]
 		if (!clsName) continue
 
 		if (el.classList) {
@@ -121,7 +127,7 @@ export function removeClass(el, cls) {
 /* istanbul ignore next */
 export const getStyle =
 	ieVersion < 9
-		? function(element, styleName) {
+		? function(element: any, styleName: string) {
 				if (isServer) return
 				if (!element || !styleName) return null
 				styleName = camelCase(styleName)
@@ -145,7 +151,7 @@ export const getStyle =
 					return element.style[styleName]
 				}
 		  }
-		: function(element, styleName) {
+		: function(element: any, styleName: any) {
 				if (isServer) return
 				if (!element || !styleName) return null
 				styleName = camelCase(styleName)
@@ -153,7 +159,8 @@ export const getStyle =
 					styleName = 'cssFloat'
 				}
 				try {
-					var computed = document.defaultView.getComputedStyle(element, '')
+					const computed = (document.defaultView as Window &
+						typeof globalThis).getComputedStyle(element, '')
 					return element.style[styleName] || computed ? computed[styleName] : null
 				} catch (e) {
 					return element.style[styleName]
@@ -161,12 +168,12 @@ export const getStyle =
 		  }
 
 /* istanbul ignore next */
-export function setStyle(element, styleName, value) {
+export function setStyle(element: any, styleName: any, value: any) {
 	if (!element || !styleName) return
 
 	if (typeof styleName === 'object') {
-		for (var prop in styleName) {
-			if (styleName.hasOwnProperty(prop)) {
+		for (const prop in styleName) {
+			if (Object.prototype.hasOwnProperty.call(styleName, prop)) {
 				setStyle(element, prop, styleName[prop])
 			}
 		}
@@ -180,7 +187,7 @@ export function setStyle(element, styleName, value) {
 	}
 }
 
-export const isScroll = (el, vertical) => {
+export const isScroll = (el: any, vertical: any) => {
 	if (isServer) return
 
 	const determinedDirection = vertical !== null || vertical !== undefined
@@ -193,7 +200,7 @@ export const isScroll = (el, vertical) => {
 	return overflow.match(/(scroll|auto)/)
 }
 
-export const getScrollContainer = (el, vertical) => {
+export const getScrollContainer = (el: any, vertical: any) => {
 	if (isServer) return
 
 	let parent = el
@@ -210,7 +217,7 @@ export const getScrollContainer = (el, vertical) => {
 	return parent
 }
 
-export const isInContainer = (el, container) => {
+export const isInContainer = (el: any, container: any) => {
 	if (isServer || !el || !container) return false
 
 	const elRect = el.getBoundingClientRect()

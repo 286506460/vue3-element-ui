@@ -1,3 +1,4 @@
+// @ts-nocheck
 import * as Vue from 'vue'
 import merge from '../merge'
 import PopupManager from './popup-manager'

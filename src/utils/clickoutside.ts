@@ -7,9 +7,9 @@ const ctx = '@@clickoutsideContext'
 let startClick: any
 let seed = 0
 
-on(document, 'mousedown', e => (startClick = e))
+on(document, 'mousedown', (e: any) => (startClick = e))
 
-on(document, 'mouseup', e => {
+on(document, 'mouseup', (e: any) => {
 	nodeList.forEach(node => node[ctx].documentHandler(e, startClick))
 })
 

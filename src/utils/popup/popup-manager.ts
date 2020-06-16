@@ -1,3 +1,4 @@
+// @ts-nocheck
 // import Vue from 'vue'
 import { addClass, removeClass } from '../dom'
 
