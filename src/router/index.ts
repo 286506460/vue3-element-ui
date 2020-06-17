@@ -39,6 +39,11 @@ const routes: Array<any> = [
 		path: '/select',
 		name: 'Select',
 		component: () => import(/* webpackChunkName: "select" */ '../views/Select.vue')
+	},
+	{
+		path: '/switch',
+		name: 'Switch',
+		component: () => import(/* webpackChunkName: "switch" */ '../views/Switch.vue')
 	}
 ]
 
