@@ -45,7 +45,7 @@
 import {
 	defineComponent,
 	ref,
-	inject,
+	// inject,
 	ComputedRef,
 	computed,
 	watch,
@@ -110,7 +110,7 @@ export default defineComponent({
 		// data
 		const coreWidth = ref<number>(props.width)
 		// inject
-		const elForm: Data = inject<Data>('elForm', {})
+		// const elForm: Data = inject<Data>('elForm', {})
 		// created
 		if (!~[props.activeValue, props.inactiveValue].indexOf(props.modelValue)) {
 			emit('update:modelValue', props.inactiveValue)
