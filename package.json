@@ -11,6 +11,7 @@
 	"dependencies": {
 		"core-js": "^3.6.4",
 		"vue": "^3.0.0-beta.1",
+		"vue-next-event-plugin": "^1.0.0-beta.1",
 		"vue-router": "^4.0.0-alpha.5"
 	},
 	"devDependencies": {
