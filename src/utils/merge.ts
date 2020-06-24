@@ -1,9 +1,10 @@
+/* eslint-disable */
 export default function(target: any) {
 	for (let i = 1, j = arguments.length; i < j; i++) {
-		let source = arguments[i] || {}
-		for (let prop in source) {
+		const source = arguments[i] || {}
+		for (const prop in source) {
 			if (source.hasOwnProperty(prop)) {
-				let value = source[prop]
+				const value = source[prop]
 				if (value !== undefined) {
 					target[prop] = value
 				}

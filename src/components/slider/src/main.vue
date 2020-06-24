@@ -163,18 +163,6 @@ export default defineComponent({
 				  }
 		)
 		// method
-		const onSliderClick = event => {
-			if (sliderDisabled.value || dragging.value) return
-			resetSize()
-			if (props.vertical) {
-				const sliderOffsetBottom = slider.value.getBoundingClientRect().bottom
-				setPosition(((sliderOffsetBottom - event.clientY) / sliderSize.value) * 100)
-			} else {
-				const sliderOffsetLeft = slider.value.getBoundingClientRect().left
-				setPosition(((event.clientX - sliderOffsetLeft) / sliderSize.value) * 100)
-			}
-			emitChange()
-		}
 		const resetSize = () => {
 			if (slider.value) {
 				sliderSize.value = slider.value[`client${props.vertical ? 'Height' : 'Width'}`]
@@ -199,6 +187,18 @@ export default defineComponent({
 			nextTick(() => {
 				emit('change', props.range ? [minValue.value, maxValue.value] : props.modelValue)
 			})
+		}
+		const onSliderClick = event => {
+			if (sliderDisabled.value || dragging.value) return
+			resetSize()
+			if (props.vertical) {
+				const sliderOffsetBottom = slider.value.getBoundingClientRect().bottom
+				setPosition(((sliderOffsetBottom - event.clientY) / sliderSize.value) * 100)
+			} else {
+				const sliderOffsetLeft = slider.value.getBoundingClientRect().left
+				setPosition(((event.clientX - sliderOffsetLeft) / sliderSize.value) * 100)
+			}
+			emitChange()
 		}
 		const valueChanged = () => {
 			if (props.range) {
@@ -281,7 +281,7 @@ export default defineComponent({
 		})
 
 		onMounted(() => {
-			let valuetext
+			// let valuetext
 			if (props.range) {
 				if (Array.isArray(props.modelValue)) {
 					firstValue.value = Math.max(props.min, props.modelValue[0])
@@ -291,7 +291,7 @@ export default defineComponent({
 					secondValue.value = props.max
 				}
 				oldValue.value = [firstValue.value, secondValue.value]
-				valuetext = `${firstValue.value}-${secondValue.value}`
+				// valuetext = `${firstValue.value}-${secondValue.value}`
 			} else {
 				if (typeof props.modelValue !== 'number' || isNaN(props.modelValue)) {
 					firstValue.value = props.min
@@ -299,7 +299,7 @@ export default defineComponent({
 					firstValue.value = Math.min(props.max, Math.max(props.min, props.modelValue))
 				}
 				oldValue.value = firstValue.value
-				valuetext = firstValue.value
+				// valuetext = firstValue.value
 			}
 			// this.$el.setAttribute('aria-valuetext', valuetext)
 

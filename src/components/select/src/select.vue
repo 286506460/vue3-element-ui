@@ -19,10 +19,10 @@
 			:class="{ 'is-focus': visible }"
 			:tabindex="multiple && filterable ? '-1' : null"
 		>
-			<template slot="prefix" v-if="$slots.prefix">
+			<template v-slot:prefix v-if="$slots.prefix">
 				<slot name="prefix"></slot>
 			</template>
-			<template slot="suffix">
+			<template v-slot:suffix>
 				<i
 					v-show="!showClose"
 					:class="['el-select__caret', 'el-input__icon', 'el-icon-' + iconClass]"
@@ -133,26 +133,85 @@ export default defineComponent({
 		const inputLength = ref<number>(20)
 		const inputWidth = ref<number>(0)
 		const initialInputHeight = ref<number>(0)
-		const cachedPlaceHolder = ref<string>('')
-		const optionsCount = ref<number>(0)
+		// const cachedPlaceHolder = ref<string>('')
+		// const optionsCount = ref<number>(0)
 		const filteredOptionsCount = ref<number>(0)
 		const visible = ref<boolean>(false)
 		const softFocus = ref<boolean>(false)
 		const selectedLabel = ref<string>('')
-		const hoverIndex = ref<number>(-1)
+		// const hoverIndex = ref<number>(-1)
 		const query = ref<string>('')
-		const previousQuery = ref<any>(null)
+		// const previousQuery = ref<any>(null)
 		const inputHovering = ref<boolean>(false)
 		const currentPlaceholder = ref<string>('')
 		const menuVisibleOnFocus = ref<boolean>(false)
-		const isOnComposition = ref<boolean>(false)
-		const isSilentBlur = ref<boolean>(false)
+		// const isOnComposition = ref<boolean>(false)
+		// const isSilentBlur = ref<boolean>(false)
 		// inject
 		const elForm: Data = inject<Data>('elForm', {})
 		const elFormItem: Data = inject<Data>('elFormItem', {})
+
+		const getOption = (value: any) => {
+			let option
+			const isObject =
+				Object.prototype.toString.call(value).toLowerCase() === '[object object]'
+			const isNull = Object.prototype.toString.call(value).toLowerCase() === '[object null]'
+			const isUndefined =
+				Object.prototype.toString.call(value).toLowerCase() === '[object undefined]'
+
+			for (let i = cachedOptions.length - 1; i >= 0; i--) {
+				const cachedOption = cachedOptions[i]
+				const isEqual = isObject
+					? getValueByPath(cachedOption.value, props.valueKey) ===
+					  getValueByPath(value, props.valueKey)
+					: cachedOption.value === value
+				if (isEqual) {
+					option = cachedOption
+					break
+				}
+			}
+			if (option) return option
+			const label = !isObject && !isNull && !isUndefined ? value : ''
+			const newOption = {
+				value: value,
+				currentLabel: label
+			}
+			if (props.multiple) {
+				// newOption.hitState = false
+			}
+			return newOption
+		}
+		const setSelected = () => {
+			if (!props.multiple) {
+				const option: any = getOption(props.modelValue)
+				if (option.created) {
+					createdLabel.value = option.currentLabel
+					createdSelected.value = true
+				} else {
+					createdSelected.value = false
+				}
+				selectedLabel.value = option.currentLabel
+				selected.value = option
+				if (props.filterable) query.value = selectedLabel.value
+				return
+			}
+			// let result = []
+			// if (Array.isArray(this.value)) {
+			// 	this.value.forEach(value => {
+			// 		result.push(this.getOption(value))
+			// 	})
+			// }
+			// this.selected = result
+			// this.$nextTick(() => {
+			// 	this.resetInputHeight()
+			// })
+		}
+
 		// watch
 		const { modelValue } = toRefs(props)
 		watch(modelValue, (val: any, oldVal: any) => {
+			console.log(val)
+			console.log(oldVal)
 			if (props.multiple) {
 				// this.resetInputHeight()
 				// if ((val && val.length > 0) || (this.$refs.input && this.query !== '')) {
@@ -180,15 +239,15 @@ export default defineComponent({
 			() => props.disabled || (elForm.props && elForm.props.disabled)
 		)
 		const readonly: ComputedRef = computed(
-			() => !props.filterable || props.multiple || !visible
+			() => !props.filterable || props.multiple || !visible.value
 		)
 		const showClose: ComputedRef = computed(() => {
-			let hasValue = props.multiple
+			const hasValue = props.multiple
 				? Array.isArray(props.modelValue) && props.modelValue.length > 0
 				: props.modelValue !== undefined &&
 				  props.modelValue !== null &&
 				  props.modelValue !== ''
-			let criteria =
+			const criteria =
 				props.clearable && !selectDisabled.value && inputHovering.value && hasValue
 			return criteria
 		})
@@ -242,63 +301,6 @@ export default defineComponent({
 				softFocus.value = false
 			}
 		}
-
-		const getOption = (value: any) => {
-			let option
-			const isObject =
-				Object.prototype.toString.call(value).toLowerCase() === '[object object]'
-			const isNull = Object.prototype.toString.call(value).toLowerCase() === '[object null]'
-			const isUndefined =
-				Object.prototype.toString.call(value).toLowerCase() === '[object undefined]'
-
-			for (let i = cachedOptions.length - 1; i >= 0; i--) {
-				const cachedOption = cachedOptions[i]
-				const isEqual = isObject
-					? getValueByPath(cachedOption.value, props.valueKey) ===
-					  getValueByPath(value, props.valueKey)
-					: cachedOption.value === value
-				if (isEqual) {
-					option = cachedOption
-					break
-				}
-			}
-			if (option) return option
-			const label = !isObject && !isNull && !isUndefined ? value : ''
-			let newOption = {
-				value: value,
-				currentLabel: label
-			}
-			if (props.multiple) {
-				// newOption.hitState = false
-			}
-			return newOption
-		}
-
-		const setSelected = () => {
-			if (!props.multiple) {
-				let option: any = getOption(props.modelValue)
-				if (option.created) {
-					createdLabel.value = option.currentLabel
-					createdSelected.value = true
-				} else {
-					createdSelected.value = false
-				}
-				selectedLabel.value = option.currentLabel
-				selected.value = option
-				if (props.filterable) query.value = selectedLabel.value
-				return
-			}
-			// let result = []
-			// if (Array.isArray(this.value)) {
-			// 	this.value.forEach(value => {
-			// 		result.push(this.getOption(value))
-			// 	})
-			// }
-			// this.selected = result
-			// this.$nextTick(() => {
-			// 	this.resetInputHeight()
-			// })
-		}
 		const handleOptionSelect = (value: any) => {
 			if (props.multiple) {
 				// const value = (this.value || []).slice()
@@ -336,7 +338,7 @@ export default defineComponent({
 			// addResizeListener(this.$el, this.handleResize)
 
 			// const reference = this.$refs.reference
-			if (reference && reference.value.input) {
+			if (reference.value && reference.value.input) {
 				const sizeMap: any = {
 					medium: 36,
 					small: 32,
@@ -351,7 +353,7 @@ export default defineComponent({
 				// resetInputHeight()
 			}
 			nextTick(() => {
-				if (reference) {
+				if (reference.value) {
 					inputWidth.value = reference.value.input.getBoundingClientRect().width
 				}
 			})

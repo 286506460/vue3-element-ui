@@ -58,7 +58,7 @@ export default {
 		el[ctx].bindingFn = binding.value
 	},
 	unmounted(el: any) {
-		let len = nodeList.length
+		const len = nodeList.length
 		for (let i = 0; i < len; i++) {
 			if (nodeList[i][ctx].id === el[ctx].id) {
 				nodeList.splice(i, 1)

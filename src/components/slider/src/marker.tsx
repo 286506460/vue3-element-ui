@@ -1,18 +1,19 @@
 export default {
-  name: 'ElMarker',
+	name: 'ElMarker',
 
-  props: {
-    mark: {
-      type: [String, Object]
-    }
-  },
-  render() {
-    let label = typeof this.mark === 'string' ? this.mark : this.mark.label;
+	props: {
+		mark: {
+			type: [String, Object]
+		}
+	},
+	render() {
+		const label =
+			typeof this.props.mark === 'string' ? this.props.mark : (this.props.mark as any).label
 
-    return (
-      <div class="el-slider__marks-text" style={ this.mark.style || {} }>
-        { label }
-      </div>
-    );
-  }
-};
+		return (
+			<div class="el-slider__marks-text" style={(this.props.mark as any).style || {}}>
+				{label}
+			</div>
+		)
+	}
+}

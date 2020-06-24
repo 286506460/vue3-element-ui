@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, provide, ComputedRef, computed, inject, ref } from 'vue'
+import { defineComponent, provide, ComputedRef, computed, inject } from 'vue'
 
 export default defineComponent({
 	name: 'ElRadioGroup',

@@ -1,4 +1,5 @@
 // @ts-nocheck
+/* eslint-disable */
 // import Vue from 'vue'
 import { addClass, removeClass } from '../dom'
 
@@ -88,7 +89,7 @@ const PopupManager = {
 			addClass(modalDom, 'v-modal-enter')
 		}
 		if (modalClass) {
-			let classArr = modalClass.trim().split(/\s+/)
+			const classArr = modalClass.trim().split(/\s+/)
 			classArr.forEach(item => addClass(modalDom, item))
 		}
 		setTimeout(() => {
@@ -118,7 +119,7 @@ const PopupManager = {
 			const topItem = modalStack[modalStack.length - 1]
 			if (topItem.id === id) {
 				if (topItem.modalClass) {
-					let classArr = topItem.modalClass.trim().split(/\s+/)
+					const classArr = topItem.modalClass.trim().split(/\s+/)
 					classArr.forEach(item => removeClass(modalDom, item))
 				}
 

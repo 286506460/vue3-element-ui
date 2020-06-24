@@ -1,12 +1,5 @@
-import {
-	ref,
-	watch,
-	defineComponent,
-	reactive,
-	nextTick,
-	onBeforeUnmount,
-	onDeactivated
-} from 'vue'
+/* eslint-disable */
+import { ref, watch, reactive, nextTick, onBeforeUnmount, onDeactivated } from 'vue'
 import { PopupManager } from './popup'
 
 const PopperJS = require('./popper')
@@ -38,9 +31,9 @@ export default (
 	// props
 	const transformOrigin = ref<boolean | string>(true)
 	const placement = ref<string>('bottom')
-	const boundariesPadding = ref<number>(5)
-	const reference = reactive<any>({})
-	const popper = reactive<any>({})
+	// const boundariesPadding = ref<number>(5)
+	// const reference = reactive<any>({})
+	// const popper = reactive<any>({})
 	const offset = ref<number>(0)
 	const value = ref<boolean>(false)
 	const visibleArrow = ref<boolean>(false)
@@ -109,6 +102,7 @@ export default (
 		options.arrowOffset = arrowOffset.value
 		popperJS = new PopperJS(reference, popper, options)
 		popperJS.onCreate((_: any) => {
+			console.log(_)
 			$emit('created', {})
 			resetTransformOrigin()
 			nextTick(
@@ -173,14 +167,14 @@ export default (
 
 	const resetTransformOrigin = () => {
 		if (!transformOrigin.value) return
-		let placementMap: any = {
+		const placementMap: any = {
 			top: 'bottom',
 			bottom: 'top',
 			left: 'right',
 			right: 'left'
 		}
-		let placement = popperJS._popper.getAttribute('x-placement').split('-')[0]
-		let origin = placementMap[placement]
+		const placement = popperJS._popper.getAttribute('x-placement').split('-')[0]
+		const origin = placementMap[placement]
 		popperJS._popper.style.transformOrigin =
 			typeof transformOrigin.value === 'string'
 				? transformOrigin.value
@@ -197,7 +191,7 @@ export default (
 
 		appended.value = true
 
-		for (let item in element.attributes) {
+		for (const item in element.attributes) {
 			if (/^_v-/.test(element.attributes[item].name)) {
 				hash = element.attributes[item].name
 				break

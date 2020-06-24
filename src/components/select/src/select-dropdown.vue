@@ -11,7 +11,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, ComputedRef, computed, inject, watch, onMounted } from 'vue'
-import Popper from '@/utils/vue-popper'
+// import Popper from '@/utils/vue-popper'
 
 export default defineComponent({
 	name: 'ElSelectDropdown',
@@ -40,8 +40,8 @@ export default defineComponent({
 			default: true
 		}
 	},
-	setup(props, context) {
-		const $el = ref<any>(null)
+	setup() {
+		// const $el = ref<any>(null)
 
 		const minWidth = ref<string>('')
 
@@ -54,7 +54,7 @@ export default defineComponent({
 		})
 
 		onMounted(() => {
-			const referenceElm = elSelect.$el
+			// const referenceElm = elSelect.$el
 			// this.$parent.popperElm = this.popperElm = $el
 			// this.$on('updatePopper', () => {
 			// 	if (this.$parent.visible) this.updatePopper()

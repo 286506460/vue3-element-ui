@@ -1,4 +1,5 @@
 // @ts-nocheck
+/* eslint-disable */
 /**
  * @fileOverview Kickass library to create and place poppers near their reference elements.
  * @version {{version}}
@@ -44,10 +45,10 @@
 })(this, function() {
 	'use strict'
 
-	var root = window
+	const root = window
 
 	// default options
-	var DEFAULTS = {
+	const DEFAULTS = {
 		// placement of the popper
 		placement: 'bottom',
 
@@ -160,8 +161,8 @@
 
 		// if the popper variable is a configuration object, parse it to generate an HTMLElement
 		// generate a default popper if is not defined
-		var isNotDefined = typeof popper === 'undefined' || popper === null
-		var isConfig = popper && Object.prototype.toString.call(popper) === '[object Object]'
+		const isNotDefined = typeof popper === 'undefined' || popper === null
+		const isConfig = popper && Object.prototype.toString.call(popper) === '[object Object]'
 		if (isNotDefined || isConfig) {
 			this._popper = this.parse(isConfig ? popper : {})
 		}
@@ -231,7 +232,7 @@
 	 * @memberof Popper
 	 */
 	Popper.prototype.update = function() {
-		var data = { instance: this, styles: {} }
+		let data = { instance: this, styles: {} }
 
 		// store placement inside the data object, modifiers will be able to edit `placement` if needed
 		// and refer to _originalPlacement to know the original value
@@ -288,7 +289,7 @@
 	 * @returns {HTMLElement} popper
 	 */
 	Popper.prototype.parse = function(config) {
-		var defaultConfig = {
+		const defaultConfig = {
 			tagName: 'div',
 			classNames: ['popper'],
 			attributes: [],
@@ -301,9 +302,9 @@
 		}
 		config = Object.assign({}, defaultConfig, config)
 
-		var d = root.document
+		const d = root.document
 
-		var popper = d.createElement(config.tagName)
+		const popper = d.createElement(config.tagName)
 		addClassNames(popper, config.classNames)
 		addAttributes(popper, config.attributes)
 		if (config.contentType === 'node') {
@@ -315,13 +316,13 @@
 		}
 
 		if (config.arrowTagName) {
-			var arrow = d.createElement(config.arrowTagName)
+			const arrow = d.createElement(config.arrowTagName)
 			addClassNames(arrow, config.arrowClassNames)
 			addAttributes(arrow, config.arrowAttributes)
 			popper.appendChild(arrow)
 		}
 
-		var parent = config.parent.jquery ? config.parent[0] : config.parent
+		let parent = config.parent.jquery ? config.parent[0] : config.parent
 
 		// if the given parent is a string, use it to match an element
 		// if more than one element is matched, the first one will be used as parent
@@ -392,7 +393,7 @@
 	 * @returns {String} position
 	 */
 	Popper.prototype._getPosition = function(popper, reference) {
-		var container = getOffsetParent(reference)
+		const container = getOffsetParent(reference)
 
 		if (this._options.forceAbsolute) {
 			return 'absolute'
@@ -400,7 +401,7 @@
 
 		// Decide if the popper will be fixed
 		// If the reference element is inside a fixed context, the popper will be fixed as well to allow them to scroll together
-		var isParentFixed = isFixed(reference, container)
+		const isParentFixed = isFixed(reference, container)
 		return isParentFixed ? 'fixed' : 'absolute'
 	}
 
@@ -415,15 +416,15 @@
 	 */
 	Popper.prototype._getOffsets = function(popper, reference, placement) {
 		placement = placement.split('-')[0]
-		var popperOffsets = {}
+		const popperOffsets = {}
 
 		popperOffsets.position = this.state.position
-		var isParentFixed = popperOffsets.position === 'fixed'
+		const isParentFixed = popperOffsets.position === 'fixed'
 
 		//
 		// Get reference element position
 		//
-		var referenceOffsets = getOffsetRectRelativeToCustomParent(
+		const referenceOffsets = getOffsetRectRelativeToCustomParent(
 			reference,
 			getOffsetParent(popper),
 			isParentFixed
@@ -432,7 +433,7 @@
 		//
 		// Get popper sizes
 		//
-		var popperRect = getOuterSizes(popper)
+		const popperRect = getOuterSizes(popper)
 
 		//
 		// Compute offsets of popper
@@ -479,7 +480,7 @@
 		root.addEventListener('resize', this.state.updateBound)
 		// if the boundariesElement is window we don't need to listen for the scroll event
 		if (this._options.boundariesElement !== 'window') {
-			var target = getScrollParent(this._reference)
+			let target = getScrollParent(this._reference)
 			// here it could be both `body` or `documentElement` thanks to Firefox, we then check both
 			if (target === root.document.body || target === root.document.documentElement) {
 				target = root
@@ -517,10 +518,10 @@
 	 */
 	Popper.prototype._getBoundaries = function(data, padding, boundariesElement) {
 		// NOTE: 1 DOM access here
-		var boundaries = {}
-		var width, height
+		let boundaries = {}
+		let width, height
 		if (boundariesElement === 'window') {
-			var body = root.document.body,
+			const body = root.document.body,
 				html = root.document.documentElement
 
 			height = Math.max(
@@ -545,26 +546,26 @@
 				left: 0
 			}
 		} else if (boundariesElement === 'viewport') {
-			var offsetParent = getOffsetParent(this._popper)
-			var scrollParent = getScrollParent(this._popper)
-			var offsetParentRect = getOffsetRect(offsetParent)
+			const offsetParent = getOffsetParent(this._popper)
+			const scrollParent = getScrollParent(this._popper)
+			const offsetParentRect = getOffsetRect(offsetParent)
 
 			// Thanks the fucking native API, `document.body.scrollTop` & `document.documentElement.scrollTop`
-			var getScrollTopValue = function(element) {
+			const getScrollTopValue = function(element) {
 				return element == document.body
 					? Math.max(document.documentElement.scrollTop, document.body.scrollTop)
 					: element.scrollTop
 			}
-			var getScrollLeftValue = function(element) {
+			const getScrollLeftValue = function(element) {
 				return element == document.body
 					? Math.max(document.documentElement.scrollLeft, document.body.scrollLeft)
 					: element.scrollLeft
 			}
 
 			// if the popper is fixed we don't have to substract scrolling from the boundaries
-			var scrollTop =
+			const scrollTop =
 				data.offsets.popper.position === 'fixed' ? 0 : getScrollTopValue(scrollParent)
-			var scrollLeft =
+			const scrollLeft =
 				data.offsets.popper.position === 'fixed' ? 0 : getScrollLeftValue(scrollParent)
 
 			boundaries = {
@@ -605,7 +606,7 @@
 	 * @param {Function} ends
 	 */
 	Popper.prototype.runModifiers = function(data, modifiers, ends) {
-		var modifiersToRun = modifiers.slice()
+		let modifiersToRun = modifiers.slice()
 		if (ends !== undefined) {
 			modifiersToRun = this._options.modifiers.slice(
 				0,
@@ -633,7 +634,7 @@
 	 * @returns {Boolean}
 	 */
 	Popper.prototype.isModifierRequired = function(requesting, requested) {
-		var index = getArrayKeyIndex(this._options.modifiers, requesting)
+		const index = getArrayKeyIndex(this._options.modifiers, requesting)
 		return !!this._options.modifiers.slice(0, index).filter(function(modifier) {
 			return modifier === requested
 		}).length
@@ -661,17 +662,17 @@
 	Popper.prototype.modifiers.applyStyle = function(data) {
 		// apply the final offsets to the popper
 		// NOTE: 1 DOM access here
-		var styles = {
+		const styles = {
 			position: data.offsets.popper.position
 		}
 
 		// round top and left to avoid blurry text
-		var left = Math.round(data.offsets.popper.left)
-		var top = Math.round(data.offsets.popper.top)
+		const left = Math.round(data.offsets.popper.left)
+		const top = Math.round(data.offsets.popper.top)
 
 		// if gpuAcceleration is set to true and transform is supported, we use `translate3d` to apply the position to the popper
 		// we automatically use the supported prefixed version if needed
-		var prefixedProperty
+		let prefixedProperty
 		if (
 			this._options.gpuAcceleration &&
 			(prefixedProperty = getSupportedPropertyName('transform'))
@@ -717,16 +718,16 @@
 	 * @returns {Object} The data object, properly modified
 	 */
 	Popper.prototype.modifiers.shift = function(data) {
-		var placement = data.placement
-		var basePlacement = placement.split('-')[0]
-		var shiftVariation = placement.split('-')[1]
+		const placement = data.placement
+		const basePlacement = placement.split('-')[0]
+		const shiftVariation = placement.split('-')[1]
 
 		// if shift shiftVariation is specified, run the modifier
 		if (shiftVariation) {
-			var reference = data.offsets.reference
-			var popper = getPopperClientRect(data.offsets.popper)
+			const reference = data.offsets.reference
+			const popper = getPopperClientRect(data.offsets.popper)
 
-			var shiftOffsets = {
+			const shiftOffsets = {
 				y: {
 					start: { top: reference.top },
 					end: { top: reference.top + reference.height - popper.height }
@@ -737,7 +738,7 @@
 				}
 			}
 
-			var axis = ['bottom', 'top'].indexOf(basePlacement) !== -1 ? 'x' : 'y'
+			const axis = ['bottom', 'top'].indexOf(basePlacement) !== -1 ? 'x' : 'y'
 
 			data.offsets.popper = Object.assign(popper, shiftOffsets[axis][shiftVariation])
 		}
@@ -753,33 +754,33 @@
 	 * @returns {Object} The data object, properly modified
 	 */
 	Popper.prototype.modifiers.preventOverflow = function(data) {
-		var order = this._options.preventOverflowOrder
-		var popper = getPopperClientRect(data.offsets.popper)
+		const order = this._options.preventOverflowOrder
+		const popper = getPopperClientRect(data.offsets.popper)
 
-		var check = {
+		const check = {
 			left: function() {
-				var left = popper.left
+				let left = popper.left
 				if (popper.left < data.boundaries.left) {
 					left = Math.max(popper.left, data.boundaries.left)
 				}
 				return { left: left }
 			},
 			right: function() {
-				var left = popper.left
+				let left = popper.left
 				if (popper.right > data.boundaries.right) {
 					left = Math.min(popper.left, data.boundaries.right - popper.width)
 				}
 				return { left: left }
 			},
 			top: function() {
-				var top = popper.top
+				let top = popper.top
 				if (popper.top < data.boundaries.top) {
 					top = Math.max(popper.top, data.boundaries.top)
 				}
 				return { top: top }
 			},
 			bottom: function() {
-				var top = popper.top
+				let top = popper.top
 				if (popper.bottom > data.boundaries.bottom) {
 					top = Math.min(popper.top, data.boundaries.bottom - popper.height)
 				}
@@ -802,9 +803,9 @@
 	 * @returns {Object} The data object, properly modified
 	 */
 	Popper.prototype.modifiers.keepTogether = function(data) {
-		var popper = getPopperClientRect(data.offsets.popper)
-		var reference = data.offsets.reference
-		var f = Math.floor
+		const popper = getPopperClientRect(data.offsets.popper)
+		const reference = data.offsets.reference
+		const f = Math.floor
 
 		if (popper.right < f(reference.left)) {
 			data.offsets.popper.left = f(reference.left) - popper.width
@@ -846,11 +847,11 @@
 			return data
 		}
 
-		var placement = data.placement.split('-')[0]
-		var placementOpposite = getOppositePlacement(placement)
-		var variation = data.placement.split('-')[1] || ''
+		let placement = data.placement.split('-')[0]
+		let placementOpposite = getOppositePlacement(placement)
+		const variation = data.placement.split('-')[1] || ''
 
-		var flipOrder = []
+		let flipOrder = []
 		if (this._options.flipBehavior === 'flip') {
 			flipOrder = [placement, placementOpposite]
 		} else {
@@ -866,11 +867,11 @@
 				placement = data.placement.split('-')[0]
 				placementOpposite = getOppositePlacement(placement)
 
-				var popperOffsets = getPopperClientRect(data.offsets.popper)
+				const popperOffsets = getPopperClientRect(data.offsets.popper)
 
 				// this boolean is used to distinguish right and bottom from top and left
 				// they need different computations to get flipped
-				var a = ['right', 'bottom'].indexOf(placement) !== -1
+				const a = ['right', 'bottom'].indexOf(placement) !== -1
 
 				// using Math.floor because the reference offsets may contain decimals we are not going to consider here
 				if (
@@ -909,8 +910,8 @@
 	 * @returns {Object} The data object, properly modified
 	 */
 	Popper.prototype.modifiers.offset = function(data) {
-		var offset = this._options.offset
-		var popper = data.offsets.popper
+		const offset = this._options.offset
+		const popper = data.offsets.popper
 
 		if (data.placement.indexOf('left') !== -1) {
 			popper.top -= offset
@@ -933,8 +934,8 @@
 	 * @returns {Object} The data object, properly modified
 	 */
 	Popper.prototype.modifiers.arrow = function(data) {
-		var arrow = this._options.arrowElement
-		var arrowOffset = this._options.arrowOffset
+		let arrow = this._options.arrowElement
+		const arrowOffset = this._options.arrowOffset
 
 		// if the arrowElement is a string, suppose it's a CSS selector
 		if (typeof arrow === 'string') {
@@ -960,18 +961,18 @@
 			return data
 		}
 
-		var arrowStyle = {}
-		var placement = data.placement.split('-')[0]
-		var popper = getPopperClientRect(data.offsets.popper)
-		var reference = data.offsets.reference
-		var isVertical = ['left', 'right'].indexOf(placement) !== -1
+		const arrowStyle = {}
+		const placement = data.placement.split('-')[0]
+		const popper = getPopperClientRect(data.offsets.popper)
+		const reference = data.offsets.reference
+		const isVertical = ['left', 'right'].indexOf(placement) !== -1
 
-		var len = isVertical ? 'height' : 'width'
-		var side = isVertical ? 'top' : 'left'
-		var translate = isVertical ? 'translateY' : 'translateX'
-		var altSide = isVertical ? 'left' : 'top'
-		var opSide = isVertical ? 'bottom' : 'right'
-		var arrowSize = getOuterSizes(arrow)[len]
+		const len = isVertical ? 'height' : 'width'
+		const side = isVertical ? 'top' : 'left'
+		const translate = isVertical ? 'translateY' : 'translateX'
+		const altSide = isVertical ? 'left' : 'top'
+		const opSide = isVertical ? 'bottom' : 'right'
+		const arrowSize = getOuterSizes(arrow)[len]
 
 		//
 		// extends keepTogether behavior making sure the popper and its reference have enough pixels in conjuction
@@ -987,9 +988,9 @@
 		}
 
 		// compute center of the popper
-		var center = reference[side] + (arrowOffset || reference[len] / 2 - arrowSize / 2)
+		const center = reference[side] + (arrowOffset || reference[len] / 2 - arrowSize / 2)
 
-		var sideValue = center - popper[side]
+		let sideValue = center - popper[side]
 
 		// prevent arrow from being placed not contiguously to its popper
 		sideValue = Math.max(Math.min(popper[len] - arrowSize - 8, sideValue), 8)
@@ -1015,17 +1016,17 @@
 	 */
 	function getOuterSizes(element) {
 		// NOTE: 1 DOM access here
-		var _display = element.style.display,
+		const _display = element.style.display,
 			_visibility = element.style.visibility
 		element.style.display = 'block'
 		element.style.visibility = 'hidden'
-		var calcWidthToForceRepaint = element.offsetWidth
+		const calcWidthToForceRepaint = element.offsetWidth
 
 		// original method
-		var styles = root.getComputedStyle(element)
-		var x = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom)
-		var y = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight)
-		var result = { width: element.offsetWidth + y, height: element.offsetHeight + x }
+		const styles = root.getComputedStyle(element)
+		const x = parseFloat(styles.marginTop) + parseFloat(styles.marginBottom)
+		const y = parseFloat(styles.marginLeft) + parseFloat(styles.marginRight)
+		const result = { width: element.offsetWidth + y, height: element.offsetHeight + x }
 
 		// reset element styles
 		element.style.display = _display
@@ -1041,7 +1042,7 @@
 	 * @returns {String} flipped placement
 	 */
 	function getOppositePlacement(placement) {
-		var hash = { left: 'right', right: 'left', bottom: 'top', top: 'bottom' }
+		const hash = { left: 'right', right: 'left', bottom: 'top', top: 'bottom' }
 		return placement.replace(/left|right|bottom|top/g, function(matched) {
 			return hash[matched]
 		})
@@ -1055,7 +1056,7 @@
 	 * @returns {Object} ClientRect like output
 	 */
 	function getPopperClientRect(popperOffsets) {
-		var offsets = Object.assign({}, popperOffsets)
+		const offsets = Object.assign({}, popperOffsets)
 		offsets.right = offsets.left + offsets.width
 		offsets.bottom = offsets.top + offsets.height
 		return offsets
@@ -1070,7 +1071,7 @@
 	 * @returns index or null
 	 */
 	function getArrayKeyIndex(arr, keyToFind) {
-		var i = 0,
+		let i = 0,
 			key
 		for (key in arr) {
 			if (arr[key] === keyToFind) {
@@ -1090,7 +1091,7 @@
 	 */
 	function getStyleComputedProperty(element, property) {
 		// NOTE: 1 DOM access here
-		var css = root.getComputedStyle(element, null)
+		const css = root.getComputedStyle(element, null)
 		return css[property]
 	}
 
@@ -1103,7 +1104,7 @@
 	 */
 	function getOffsetParent(element) {
 		// NOTE: 1 DOM access here
-		var offsetParent = element.offsetParent
+		const offsetParent = element.offsetParent
 		return offsetParent === root.document.body || !offsetParent
 			? root.document.documentElement
 			: offsetParent
@@ -1117,7 +1118,7 @@
 	 * @returns {Element} offset parent
 	 */
 	function getScrollParent(element) {
-		var parent = element.parentNode
+		const parent = element.parentNode
 
 		if (!parent) {
 			return element
@@ -1177,7 +1178,7 @@
 			return n !== '' && !isNaN(parseFloat(n)) && isFinite(n)
 		}
 		Object.keys(styles).forEach(function(prop) {
-			var unit = ''
+			let unit = ''
 			// add unit if the value is numeric and is one of the following
 			if (
 				['width', 'height', 'top', 'right', 'bottom', 'left'].indexOf(prop) !== -1 &&
@@ -1197,7 +1198,7 @@
 	 * @returns {Boolean} answer to: is a function?
 	 */
 	function isFunction(functionToCheck) {
-		var getType = {}
+		const getType = {}
 		return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]'
 	}
 
@@ -1209,7 +1210,7 @@
 	 * @return {Object} position - Coordinates of the element and its `scrollTop`
 	 */
 	function getOffsetRect(element) {
-		var elementRect = {
+		const elementRect = {
 			width: element.offsetWidth,
 			height: element.offsetHeight,
 			left: element.offsetLeft,
@@ -1231,13 +1232,13 @@
 	 * @return {Object} client rect
 	 */
 	function getBoundingClientRect(element) {
-		var rect = element.getBoundingClientRect()
+		const rect = element.getBoundingClientRect()
 
 		// whether the IE version is lower than 11
-		var isIE = navigator.userAgent.indexOf('MSIE') != -1
+		const isIE = navigator.userAgent.indexOf('MSIE') != -1
 
 		// fix ie document bounding top always 0 bug
-		var rectTop = isIE && element.tagName === 'HTML' ? -element.scrollTop : rect.top
+		const rectTop = isIE && element.tagName === 'HTML' ? -element.scrollTop : rect.top
 
 		return {
 			left: rect.left,
@@ -1258,18 +1259,18 @@
 	 * @return {Object} rect
 	 */
 	function getOffsetRectRelativeToCustomParent(element, parent, fixed) {
-		var elementRect = getBoundingClientRect(element)
-		var parentRect = getBoundingClientRect(parent)
+		const elementRect = getBoundingClientRect(element)
+		const parentRect = getBoundingClientRect(parent)
 
 		if (fixed) {
-			var scrollParent = getScrollParent(parent)
+			const scrollParent = getScrollParent(parent)
 			parentRect.top += scrollParent.scrollTop
 			parentRect.bottom += scrollParent.scrollTop
 			parentRect.left += scrollParent.scrollLeft
 			parentRect.right += scrollParent.scrollLeft
 		}
 
-		var rect = {
+		const rect = {
 			top: elementRect.top - parentRect.top,
 			left: elementRect.left - parentRect.left,
 			bottom: elementRect.top - parentRect.top + elementRect.height,
@@ -1288,10 +1289,10 @@
 	 * @returns {String} prefixed property (camelCase)
 	 */
 	function getSupportedPropertyName(property) {
-		var prefixes = ['', 'ms', 'webkit', 'moz', 'o']
+		const prefixes = ['', 'ms', 'webkit', 'moz', 'o']
 
-		for (var i = 0; i < prefixes.length; i++) {
-			var toCheck = prefixes[i]
+		for (let i = 0; i < prefixes.length; i++) {
+			const toCheck = prefixes[i]
 				? prefixes[i] + property.charAt(0).toUpperCase() + property.slice(1)
 				: property
 			if (typeof root.document.body.style[toCheck] !== 'undefined') {
@@ -1319,18 +1320,18 @@
 					throw new TypeError('Cannot convert first argument to object')
 				}
 
-				var to = Object(target)
-				for (var i = 1; i < arguments.length; i++) {
-					var nextSource = arguments[i]
+				const to = Object(target)
+				for (let i = 1; i < arguments.length; i++) {
+					let nextSource = arguments[i]
 					if (nextSource === undefined || nextSource === null) {
 						continue
 					}
 					nextSource = Object(nextSource)
 
-					var keysArray = Object.keys(nextSource)
-					for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
-						var nextKey = keysArray[nextIndex]
-						var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey)
+					const keysArray = Object.keys(nextSource)
+					for (let nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+						const nextKey = keysArray[nextIndex]
+						const desc = Object.getOwnPropertyDescriptor(nextSource, nextKey)
 						if (desc !== undefined && desc.enumerable) {
 							to[nextKey] = nextSource[nextKey]
 						}

@@ -148,9 +148,9 @@ export default {
 						)
 					}
 					scrollBarWidth = getScrollBarWidth()
-					let bodyHasOverflow =
+					const bodyHasOverflow =
 						document.documentElement.clientHeight < document.body.scrollHeight
-					let bodyOverflowY = getStyle(document.body, 'overflowY')
+					const bodyOverflowY = getStyle(document.body, 'overflowY')
 					if (
 						scrollBarWidth > 0 &&
 						(bodyHasOverflow || bodyOverflowY === 'scroll') &&
